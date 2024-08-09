@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Template</title>
+    <style>
+        body {
+            background-image: url("bg.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* background: #f0f0f0; */
+
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+
+        #info p {
+            margin-left: 10%;
+            margin: 8px 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #homepageForm {
+            font-size: 16px;
+            ;
+            font-weight: bold;
+            position: absolute;
+            display: flex;
+            flex-direction: row;
+            top: 5%;
+            left: auto;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #homepageform label {
+            margin-top: 50%;
+            text-align: center;
+        }
+
+        #homepageForm button {
+            width: auto;
+            box-sizing: border-box;
+            font-size: 14px;
+            padding: 8px 16px;
+            background-color: #6178aa;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #homepageForm button:hover {
+            background-color: #2b5b96;
+        }
+
+        input[type=text] {
+            width: 130px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('searchIcon.png');
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        input[type=text]:focus {
+            width: 80%;
+        }
+    </style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<body>
+    <form type="text" id="homepageForm" action="/" method="POST">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" placeholder="Search for places">
+        <button type="submit">Search</button>
+    </form>
+    <% if (error) { %>
+        <div class="error-message">
+            <%= error %>
+        </div>
+        <% } else { %>
+            <div id="info">
+                <p>Place: <%= place %>
+                </p>
+                <p>Region: <%= region %>
+                </p>
+                <p>Current temp: <%= current %>°C</p>
+            </div>
+
+            <% values.forEach(value=> { %>
+                <div class="temp" data-id="<%= value %>"></div>
+                <% }); %>
+
+                    <canvas id="myChart" style="width:100%; max-width:1000px;"></canvas>
+                    <% } %>
+                        </div>
+                        <script>
+                            const xValues = ["00.00", "01.00", "02.00", "03.00", "04.00", "05.00", "06.00", "07.00", "08.00", "09.00", "10.00", "11.00", "12.00", "13.00", "14.00", "15.00", "16.00", "17.00", "18.00", "19.00", "20.00", "21.00", "22.00"];
+                            let ydata = [];
+                            function test() {
+                                let results = document.querySelectorAll(".temp");
+                                results.forEach(result => {
+                                    ydata.push(result.getAttribute('data-id'));
+                                })
+                            }
+                            test();
+                            console.log(ydata);
+
+                            const barColors = ["blue"];
+
+                            new Chart("myChart", {
+                                type: "bar",
+                                data: {
+                                    labels: xValues,
+                                    datasets: [{
+                                        backgroundColor: "rgba(54, 162, 235, 0.6)",
+                                        borderColor: "rgba(54, 162, 235, 1)",
+                                        borderWidth: 1,
+                                        hoverBackgroundColor: "rgba(54, 162, 235, 0.8)",
+                                        hoverBorderColor: "rgba(54, 162, 235, 1.2)",
+                                        data: ydata,
+                                    }]
+                                },
+                                options: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: "Temperature Data Today (in °C)",
+                                        fontColor: "rgba(255, 255, 255, 0.8)",
+                                        fontSize: 18,
+                                    },
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true,
+                                                fontColor: "rgba(255, 255, 255, 0.8)",
+                                            },
+                                            gridLines: {
+                                                color: "rgba(255, 255, 255, 0.2)"
+                                            }
+                                        }],
+                                        xAxes: [{
+                                            ticks: {
+                                                fontColor: "rgba(255, 255, 255, 0.8)",
+                                            },
+                                            gridLines: {
+                                                color: "rgba(255, 255, 255, 0.2)"
+                                            }
+                                        }]
+                                    },
+                                    layout: {
+                                        padding: {
+                                            left: 20,
+                                            right: 20,
+                                            top: 20,
+                                            bottom: 20
+                                        }
+                                    }
+                                }
+                            });
+
+                        </script>
+
+</body>
+
+</html>
